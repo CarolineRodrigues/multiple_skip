@@ -31413,8 +31413,9 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
       <div class="agora-skip-navigation container mx-auto py-16">
         <div
           role="button"
+          tabindex="-1"
           class="flex items-center justify-center agora-btn agora-btn-link-primary skip-button"
-          aria-expanded="true"
+          aria-expanded="false"
         >
           <span class="children-wrapper">Skip to content</span>
 
@@ -31520,11 +31521,31 @@ Constrain images and videos to the parent width and preserve their intrinsic asp
 </html>
 
 <script>
-  function handleOnFocus() {
-    document.querySelector(".agora-skip-navigation").classList.add("show");
+  function handleOnKeyUp(evt) {
+    if (evt.code === "Enter") {
+      document.querySelector(".skip-options").classList.remove("hidden");
+      document.querySelectorAll('[role="menuitem"]')[0].focus();
+    }
   }
+  let a = 0;
+  document
+    .querySelector(".agora-skip-navigation")
+    .addEventListener("focusin", () => {
+      console.log(document.activeElement);
+      console.log(document.querySelector(".skip-button"));
+      console.log(
+        document.activeElement !== document.querySelector(".skip-button")
+      );
+      if (document.activeElement !== document.querySelector(".skip-button") && a ===0) {
+        console.log("focus on button");
+        document.querySelector(".skip-options").classList.add("hidden");
+        document.querySelector(".skip-button").focus();
+        document.querySelector(".agora-skip-navigation").classList.add("show");
+    }
+    a=1;
+    });
 
   document
     .querySelector(".skip-button")
-    .setAttribute("onfocus", "handleOnFocus()");
+    .setAttribute("onkeyup", "handleOnKeyUp(event)");
 </script>
